@@ -3,6 +3,7 @@ import { Button } from './ui/button'
 import { Card } from './Card'
 import { withAuthorization } from '@/hocs/withAuthorization'
 import { VisibilityController } from './VisibilityController'
+import { createContext } from 'vm'
 
 interface IProps {
   title: string
@@ -13,6 +14,10 @@ interface IState {
   counter: number
   isLoading: boolean
 }
+
+const AuthContext = createContext({
+  isAuthenticated: true,
+})
 
 class CounterComponent extends React.Component<IProps, IState> {
   state: Readonly<IState> = {
@@ -64,24 +69,34 @@ class CounterComponent extends React.Component<IProps, IState> {
 
   render(): ReactNode {
     return (
-      <Card title="Counter">
-        <VisibilityController>
-          {({ isVisible, toggle }) => (
-            <div className="mb-10 flex justify-between items-center">
-              <h1>Saldo atual: {isVisible ? this.state.counter : '*******'}</h1>
+      <AuthContext.Provider value={{ isAuthenticated: true }}>
+        <Card title="Counter">
+          <AuthContext.Consumer>
+            {({ isAuthenticated }: { isAuthenticated: boolean }) => ({
+              'is authenticated': isAuthenticated,
+            })}
+          </AuthContext.Consumer>
 
-              <Button variant={'outline'} onClick={toggle}>
-                {isVisible ? 'Esconder' : 'Mostrar'}
-              </Button>
-            </div>
-          )}
-        </VisibilityController>
+          <VisibilityController>
+            {({ isVisible, toggle }) => (
+              <div className="mb-10 flex justify-between items-center">
+                <h1>
+                  Saldo atual: {isVisible ? this.state.counter : '*******'}
+                </h1>
 
-        <div className="space-x-1">
-          <Button onClick={this.handlePlus}>+</Button>
-          <Button onClick={this.handleMinus}>-</Button>
-        </div>
-      </Card>
+                <Button variant={'outline'} onClick={toggle}>
+                  {isVisible ? 'Esconder' : 'Mostrar'}
+                </Button>
+              </div>
+            )}
+          </VisibilityController>
+
+          <div className="space-x-1">
+            <Button onClick={this.handlePlus}>+</Button>
+            <Button onClick={this.handleMinus}>-</Button>
+          </div>
+        </Card>
+      </AuthContext.Provider>
     )
   }
 }
