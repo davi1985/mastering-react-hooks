@@ -1,9 +1,11 @@
 import React, { ReactNode } from 'react'
 import { Button } from './ui/button'
 import { Card } from './Card'
+import { withAuthorization } from '@/hocs/withAuthorization'
 
 interface IProps {
   title: string
+  userRole: string
 }
 
 interface IState {
@@ -11,14 +13,23 @@ interface IState {
   isLoading: boolean
 }
 
-export class Counter extends React.Component<IProps, IState> {
+class CounterComponent extends React.Component<IProps, IState> {
   state: Readonly<IState> = {
     counter: 0,
     isLoading: false,
   }
 
-  handleChangeCounter(value: 1 | -1) {
-    this.setState({ counter: this.state.counter + value })
+  constructor(props: IProps) {
+    super(props)
+    this.handlePlus = this.handlePlus.bind(this)
+    this.handleMinus = this.handleMinus.bind(this)
+  }
+
+  handlePlus() {
+    this.setState({ counter: this.state.counter + 1 })
+  }
+  handleMinus() {
+    this.setState({ counter: this.state.counter - 1 })
   }
 
   async componentDidMount(): Promise<void> {
@@ -26,7 +37,7 @@ export class Counter extends React.Component<IProps, IState> {
 
     window.addEventListener('resize', this.handleResize)
 
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    await new Promise((resolve) => setTimeout(resolve, 20))
 
     this.setState({ isLoading: false })
   }
@@ -56,10 +67,12 @@ export class Counter extends React.Component<IProps, IState> {
         <h1>Valor atual: {this.state.counter}</h1>
 
         <div className="space-x-1">
-          <Button onClick={() => this.handleChangeCounter(1)}>+</Button>
-          <Button onClick={() => this.handleChangeCounter(-1)}>-</Button>
+          <Button onClick={this.handlePlus}>+</Button>
+          <Button onClick={this.handleMinus}>-</Button>
         </div>
       </Card>
     )
   }
 }
+
+export const Counter = withAuthorization(CounterComponent, ['admin'])
