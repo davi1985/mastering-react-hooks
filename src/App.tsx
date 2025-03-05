@@ -1,4 +1,4 @@
-import { Reducer } from './hooks/01-useReducer'
+import { Reducer } from './hooks/02-useReducer'
 
 export const App = () => (
   <div className="min-h-screen grid place-items-center">
