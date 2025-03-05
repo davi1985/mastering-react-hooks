@@ -1,9 +1,9 @@
-import { Counter } from './components/Counter'
+import { State } from './hooks/01-useState'
 
 export const App = () => (
   <div className="min-h-screen grid place-items-center">
     <div className="w-full max-w-sm">
-      <Counter title="Counter #1" userRole="admin" />
+      <State />
     </div>
   </div>
 )
