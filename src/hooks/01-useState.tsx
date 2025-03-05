@@ -22,7 +22,7 @@ export const State = () => {
       <h1>Counter: {counter}</h1>
 
       <Button onClick={handlePlus}>+</Button>
-      <Button onClick={handleMinus}>-</Button>
+      <Button onClick={handlePlus}>+</Button>
       <Button onClick={handleReset}>Reset</Button>
     </div>
   )
