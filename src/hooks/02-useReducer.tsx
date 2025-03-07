@@ -48,11 +48,30 @@ const reducer = (prevState: State, action: Action) => {
   }
 }
 
-export const Reducer = () => {
-  const [state, dispatch] = useReducer(reducer, {
-    user: { id: Date.now(), name: 'Davi', age: 39 },
+const getInitialState = () => {
+  return {
+    user: {
+      id: Date.now(),
+      name: 'Davi',
+      age: 39,
+    },
     isUnderage: false,
-  })
+  }
+}
+
+export const Reducer = () => {
+  const [state, dispatch] = useReducer(
+    reducer,
+    {
+      user: {
+        id: Date.now(),
+        name: 'Davi',
+        age: 39,
+      },
+      isUnderage: false,
+    },
+    getInitialState
+  )
 
   const handleChangeUser = () => dispatch({ type: 'CHANGE_USER' })
   const handleRefreshAge = () =>
